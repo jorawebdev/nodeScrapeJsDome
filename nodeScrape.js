@@ -43,7 +43,7 @@ var scrape = function(){
         $('a').each(function(){
           box.push('{"url" : "' + url + $(this).attr("href") + '", "session" : "' + h3 + '", "events" : "' + $(this).text() + '"}');
         });
-        console.log(box);
+        //console.log(box);
         fs.writeFile('public/js/swimJson.js', 'myJs=[' + box + ']');
       }
     });
