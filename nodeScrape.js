@@ -20,21 +20,31 @@ jsdom.env({
 });
 
 var scrape = function(){
-var box =[];
-
-jsdom.env({
-  html: bUrl + aCollection[0] + '/evtindex.htm',
-  src: [
-    jquery
-  ],
-  done: function(errors, window) {
-    var $ = window.$;
-    $('a').each(function(){
-      box.push($(this).attr('href'));
+  var box =[];
+  var runSites = function(iter){
+    var j = iter;
+    jsdom.env({
+      html: bUrl + j + '/evtindex.htm',
+      src: [
+        jquery
+      ],
+      done: function(errors, window) {
+        var $ = window.$;
+        var url = bUrl + j + '/';
+        $('a').each(function(){
+          box.push('{["' + $('h3').text() + '", "' + $(this).text() + '"] : "' + url + $(this).attr("href")+ '"}');
+        });
+        //console.log(box);
+        fs.writeFile('swimJson.js', box);
+      }
     });
-    console.log(box);
   }
-});
+  var colLen = aCollection.length;
+  (function(){
+    for (var i=0; i<colLen; i++){
+      if ( i === (colLen-1)) { 
+        runSites(aCollection[i]);
+      }
+    }
+  })();
 }
-
-
