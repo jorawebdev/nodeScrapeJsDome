@@ -37,11 +37,14 @@ var scrape = function(){
       ],
       done: function(errors, window) {
         var $ = window.$;
-        var url = bUrl + j + '/';
+        var url = bUrl + j;
+        url=url.replace(/\/$/g, "");
         var h3 = $('h3').text();
         h3 = h3.replace(/(\r\n|\n|\r)/gm,", ");
         $('a').each(function(){
-          box.push('{"url" : "' + url + $(this).attr("href") + '", "session" : "' + h3 + '", "events" : "' + $(this).text() + '"}');
+          var href = url + '/' + $(this).attr("href");
+          box.push('{"url" : "' + href + '", "session" : "' + h3 + '", "events" : "' + $(this).text() + '"}');
+          //scrapeResults(href);
         });
         //console.log(box);
         fs.writeFile('public/js/swimJson.js', 'myJs=[' + box + ']');
